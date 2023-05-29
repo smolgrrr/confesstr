@@ -7,6 +7,10 @@ import { NostrProvider } from "nostr-react";
 const relayUrls = [
   "wss://nostr-pub.wellorder.net",
   "wss://nos.lol",
+  "wss://nostr.mutinywallet.com",
+  "wss://relay.mostr.pub",
+  "wss://relay.damus.io",
+  "wss://relay.snort.social",
 ];
 
 const root = ReactDOM.createRoot(
