@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { useNostr } from "nostr-react";
 import VoidCat from '../utils/NostrImg';
 import { handleThreadSubmit } from '../utils/postEvent';
+import { nip19 } from 'nostr-tools';
 
 const Home = () => {
   const { publish } = useNostr();
   const [comment, setComment] = useState("");
   const [hasSubmittedPost, setHasSubmittedPost] = useState(false);
+  const [confessionID, setConfessionID] = useState("");
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -16,6 +18,7 @@ const Home = () => {
       if (newEvent) {
         publish(newEvent);
         setHasSubmittedPost(true);
+        setConfessionID(nip19.noteEncode(newEvent.id));
       }
     } catch (error) {
       console.error(error);
@@ -62,6 +65,7 @@ const Home = () => {
           </div>
           <button className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:opacity-50 dark:focus:ring-zinc-400 disabled:pointer-events-none dark:focus:ring-offset-zinc-900 data-[state=open]:bg-zinc-100 dark:data-[state=open]:bg-zinc-800 text-white hover:bg-zinc-700 dark:text-zinc-900 h-10 py-2 px-4 bg-blue-500 dark:bg-blue-500 dark:hover:bg-blue-600 dark:hover:text-black">Post</button>
         </form>
+        {hasSubmittedPost && confessionID && (<a href={`https://iris.to/${confessionID}`} className="text-sm font-medium text-gray-900 dark:text-white">View your confession: {confessionID}</a>)}
       </div>
     </div>
   );
