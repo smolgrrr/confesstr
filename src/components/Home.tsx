@@ -1,81 +1,70 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNostr } from "nostr-react";
-import { useState } from "react";
-import NostrImg from '../utils/NostrImg';
+import VoidCat from '../utils/NostrImg';
 import { handleThreadSubmit } from '../utils/postEvent';
 
 const Home = () => {
   const { publish } = useNostr();
   const [comment, setComment] = useState("");
-  const [file, setFile] = useState("");
   const [hasSubmittedPost, setHasSubmittedPost] = useState(false);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     
-    handleThreadSubmit(comment, file, hasSubmittedPost)
-    .then(newEvent => {
+    try {
+      const newEvent = await handleThreadSubmit(comment, hasSubmittedPost);
       if (newEvent) {
         publish(newEvent);
         setHasSubmittedPost(true);
       }
-    })
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  async function attachFile(file_input: File | null) {
+  const attachFile = async (file_input: File | null) => {
     try {
       if (file_input) {
-        const rx = await NostrImg(file_input);
+        const rx = await VoidCat(file_input);
         if (rx.url) {
-          setFile(rx.url);
+          setComment(comment + rx.url);
         } else if (rx?.error) {
-          setFile(rx.error);
+          setComment(comment + rx.error);
         }
       }
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        setFile(error?.message);
-      }
+    } catch (error) {
+      console.error(error);
     }
   }
   
   return (
-    <div>
- <form name="post" method="post" encType="multipart/form-data" onSubmit={handleSubmit}><input type="hidden" name="MAX_FILE_SIZE" defaultValue={4194304} />
-        <table className="postForm" id="postForm">
-          <tbody>
-            <tr data-type="Comment">
-              <td>Comment*</td>
-              <td><textarea name="com" cols={48} rows={4} wrap="soft" defaultValue={""} onChange={(e) => setComment(e.target.value)} /></td>
-            </tr>
-            <tr data-type="File">
-              <td>File*</td>
-              <td> <input type="file" name="file_input" id="file_input"
-                onChange={(e) => {
-                  const file_input = e.target.files?.[0];
-                  if (file_input) {
-                    attachFile(file_input);
-                  }
-                }}>
-              </input></td>
-            </tr>
-            <tr data-type="File link">
-              <td></td>
-              <td><input name="file" type="text" placeholder={"or direct media link"} onChange={(e) => setFile(e.target.value)} />            <input type="submit" defaultValue="Post" tabIndex={6} /></td>
-            </tr>
-          </tbody>
-          <tfoot>
-            <tr>
-              <td colSpan={2}>
-                <div id="postFormError" />
-              </td>
-            </tr>
-          </tfoot>
-        </table>
-      </form>
+    <div className="flex items-center justify-center h-screen">
+      <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+        <h1 className="text-xl font-medium">Confess to Nostr</h1>
+        <form className="grid gap-6" name="post" method="post" encType="multipart/form-data" onSubmit={handleSubmit}>
+          <input type="hidden" name="MAX_FILE_SIZE" defaultValue={4194304} />
+          <div className="space-y-2">
+            <label className="text-sm font-medium uppercase">Confession*</label>
+            <textarea required name="com" cols={48} rows={4} wrap="soft" value={comment} onChange={(e) => setComment(e.target.value)} className="my-0 mb-2 block w-full rounded-md border border-zinc-300 py-2 px-3 text-sm placeholder:text-zinc-400 hover:border-zinc-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-800 focus:ring-offset-1 dark:border-zinc-600 dark:bg-zinc-800" />
+          </div>
+          <div className="space-y-2">
+            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Upload Media</label>
+            <input type="file" name="file_input" id="file_input"
+              className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+              onChange={(e) => {
+                const file_input = e.target.files?.[0];
+                if (file_input) {
+                  attachFile(file_input);
+                }
+              }}
+            />
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">Wait for Media link to appear in confession before posting.</p>
+          </div>
+          <button className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:opacity-50 dark:focus:ring-zinc-400 disabled:pointer-events-none dark:focus:ring-offset-zinc-900 data-[state=open]:bg-zinc-100 dark:data-[state=open]:bg-zinc-800 text-white hover:bg-zinc-700 dark:text-zinc-900 h-10 py-2 px-4 bg-blue-500 dark:bg-blue-500 dark:hover:bg-blue-600 dark:hover:text-black">Post</button>
+        </form>
+      </div>
     </div>
   );
-
 };
 
 export default Home;

@@ -6,10 +6,8 @@ import {
   getSignature,
 } from "nostr-tools";
 
-export const handleThreadSubmit = async (comment: string, file: string, hasSubmittedPost: boolean) => {
-  let message = comment + " " + file;
-
-  if (!message) {
+export const handleThreadSubmit = async (comment: string, hasSubmittedPost: boolean) => {
+  if (!comment) {
     alert("no message provided");
     return;
   }
@@ -21,7 +19,7 @@ export const handleThreadSubmit = async (comment: string, file: string, hasSubmi
 
   const newEvent: NostrEvent = {
     id: 'null',
-    content: message,
+    content: comment,
     kind: 1,
     tags: [],
     created_at: dateToUnix(),
