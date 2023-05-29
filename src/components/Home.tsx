@@ -48,10 +48,10 @@ const Home = () => {
           <input type="hidden" name="MAX_FILE_SIZE" defaultValue={4194304} />
           <div className="space-y-2">
             <label className="text-sm font-medium uppercase">Confession*</label>
-            <textarea required name="com" cols={48} rows={4} wrap="soft" value={comment} onChange={(e) => setComment(e.target.value)} className="my-0 mb-2 block w-full rounded-md border border-zinc-300 py-2 px-3 text-sm placeholder:text-zinc-400 hover:border-zinc-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-800 focus:ring-offset-1 dark:border-zinc-600 dark:bg-zinc-800" />
+            <textarea required name="com" cols={48} rows={4} wrap="soft" value={comment} onChange={(e) => setComment(e.target.value)} className="my-0 mb-2 block w-full rounded-md border border-zinc-300 py-2 px-3 text-sm placeholder:text-zinc-400 hover:border-zinc-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-800 focus:ring-offset-1 dark:border-zinc-600 bg-zinc-800" />
           </div>
           <div className="space-y-2">
-            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Upload Media</label>
+            <label className="block mb-2 text-sm font-medium text-gray-900 text-white">Upload Media</label>
             <input type="file" name="file_input" id="file_input"
               className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
               onChange={(e) => {
