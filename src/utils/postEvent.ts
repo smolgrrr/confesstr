@@ -6,7 +6,7 @@ import {
   getSignature,
   nip19
 } from "nostr-tools";
-import { boards } from "../constants/const";
+// import { boards } from "../constants/const";
 
 export const handleThreadSubmit = async (comment: string, hasSubmittedPost: boolean) => {
   
