@@ -6,6 +6,7 @@ import {
   getSignature,
   nip19
 } from "nostr-tools";
+import { boards } from "../constants/const";
 
 export const handleThreadSubmit = async (comment: string, hasSubmittedPost: boolean) => {
   
@@ -14,7 +15,7 @@ export const handleThreadSubmit = async (comment: string, hasSubmittedPost: bool
     return;
   }
 
-  const tags = [];
+  const tags = [["p", boards[1]]];
   if (comment.includes('note') || comment.includes('npub')) {
     const tag = comment.match(/(note|npub)[a-z0-9]+/);
     
