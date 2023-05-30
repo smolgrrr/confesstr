@@ -30,9 +30,9 @@ const Home = () => {
       if (file_input) {
         const rx = await VoidCat(file_input);
         if (rx.url) {
-          setComment(comment + rx.url);
+          setComment(comment + " " + rx.url);
         } else if (rx?.error) {
-          setComment(comment + rx.error);
+          setComment(comment + " " + rx.error);
         }
       }
     } catch (error) {

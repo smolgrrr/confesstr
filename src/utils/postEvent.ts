@@ -15,7 +15,7 @@ export const handleThreadSubmit = async (comment: string, hasSubmittedPost: bool
     return;
   }
 
-  const tags = [["p", boards[1]]];
+  const tags = [["p", boards[0]]];
   if (comment.includes('note') || comment.includes('npub')) {
     const tag = comment.match(/(note|npub)[a-z0-9]+/);
     
